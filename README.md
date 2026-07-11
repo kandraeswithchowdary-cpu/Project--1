@@ -10,6 +10,8 @@ python server.py
 
 The server starts at `http://127.0.0.1:8000`.
 
+Open that URL in a browser to use the calculator interface.
+
 You can choose another port:
 
 ```bash

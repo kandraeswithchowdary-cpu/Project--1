@@ -4,24 +4,40 @@ from __future__ import annotations
 
 import argparse
 import json
+import mimetypes
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
+from urllib.parse import urlparse
 
 from calculator import CalculatorError, ScientificCalculator
 
 
 calculator = ScientificCalculator()
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_ROUTES = {
+    "/": BASE_DIR / "index.html",
+    "/index.html": BASE_DIR / "index.html",
+    "/styles.css": BASE_DIR / "styles.css",
+    "/app.js": BASE_DIR / "app.js",
+}
 
 
 class CalculatorRequestHandler(BaseHTTPRequestHandler):
     server_version = "ScientificCalculator/1.0"
 
     def do_GET(self) -> None:
-        if self.path == "/health":
+        path = urlparse(self.path).path
+
+        if path in STATIC_ROUTES:
+            self._send_file(STATIC_ROUTES[path])
+            return
+
+        if path == "/health":
             self._send_json({"status": "ok"})
             return
 
-        if self.path == "/functions":
+        if path == "/functions":
             self._send_json(
                 {
                     "functions": calculator.available_functions(),
@@ -34,7 +50,8 @@ class CalculatorRequestHandler(BaseHTTPRequestHandler):
         self._send_json({"error": "Not found."}, status=404)
 
     def do_POST(self) -> None:
-        if self.path != "/calculate":
+        path = urlparse(self.path).path
+        if path != "/calculate":
             self._send_json({"error": "Not found."}, status=404)
             return
 
@@ -75,6 +92,19 @@ class CalculatorRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_file(self, path: Path) -> None:
+        if not path.exists() or not path.is_file():
+            self._send_json({"error": "File not found."}, status=404)
+            return
+
+        body = path.read_bytes()
+        content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
 
