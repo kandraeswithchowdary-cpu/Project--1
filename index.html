@@ -8,87 +8,97 @@
     <script src="app.js" defer></script>
   </head>
   <body>
-    <main class="app-shell" aria-label="Scientific calculator">
-      <section class="calculator" aria-label="Calculator controls">
-        <header class="topbar">
-          <h1>Scientific Calculator</h1>
-          <div class="angle-toggle" role="group" aria-label="Angle mode">
-            <button class="mode-button is-active" type="button" data-angle="rad">RAD</button>
-            <button class="mode-button" type="button" data-angle="deg">DEG</button>
-          </div>
-        </header>
+    <main class="calculator-shell" aria-label="Scientific calculator">
+      <section class="calculator" aria-label="Calculator">
+        <label class="expression-label" for="expression">Expression</label>
+        <input
+          id="expression"
+          class="display-input"
+          autocomplete="off"
+          inputmode="text"
+          spellcheck="false"
+          aria-label="Expression"
+          value="0"
+        >
+        <output id="result" class="result-output" aria-live="polite">0</output>
 
-        <section class="display-panel" aria-label="Current calculation">
-          <input
-            id="expression"
-            class="expression-input"
-            autocomplete="off"
-            inputmode="text"
-            spellcheck="false"
-            aria-label="Expression"
-            placeholder="0"
-          >
-          <output id="result" class="result-output" aria-live="polite">0</output>
-          <p id="status" class="status-line" role="status" aria-live="polite"></p>
-        </section>
+        <div class="mode-row" role="radiogroup" aria-label="Angle mode">
+          <label><input type="radio" name="angleMode" value="deg" checked> Deg</label>
+          <label><input type="radio" name="angleMode" value="rad"> Rad</label>
+        </div>
+
+        <p id="status" class="status-line" role="status" aria-live="polite"></p>
 
         <section class="keypad" aria-label="Calculator keypad">
-          <button type="button" class="key function" data-insert="sin(">sin</button>
-          <button type="button" class="key function" data-insert="cos(">cos</button>
-          <button type="button" class="key function" data-insert="tan(">tan</button>
-          <button type="button" class="key operator" data-action="backspace" title="Backspace">⌫</button>
-          <button type="button" class="key danger" data-action="clear">C</button>
+          <button type="button" class="key" data-insert="sin(">sin</button>
+          <button type="button" class="key" data-insert="cos(">cos</button>
+          <button type="button" class="key" data-insert="tan(">tan</button>
+          <button type="button" class="key" data-insert="asin(">sin<sup>-1</sup></button>
+          <button type="button" class="key" data-insert="acos(">cos<sup>-1</sup></button>
 
-          <button type="button" class="key function" data-insert="asin(">asin</button>
-          <button type="button" class="key function" data-insert="acos(">acos</button>
-          <button type="button" class="key function" data-insert="atan(">atan</button>
-          <button type="button" class="key constant" data-insert="pi">π</button>
-          <button type="button" class="key constant" data-insert="e">e</button>
+          <button type="button" class="key" data-insert="atan(">tan<sup>-1</sup></button>
+          <button type="button" class="key" data-insert="pi">&pi;</button>
+          <button type="button" class="key" data-insert="e">e</button>
+          <button type="button" class="key" data-insert="^">x<sup>y</sup></button>
+          <button type="button" class="key" data-insert="^3">x<sup>3</sup></button>
 
-          <button type="button" class="key function" data-insert="sqrt(">√</button>
-          <button type="button" class="key function" data-insert="ln(">ln</button>
-          <button type="button" class="key function" data-insert="log(">log</button>
-          <button type="button" class="key operator" data-insert="^2">x²</button>
-          <button type="button" class="key operator" data-insert="^">xʸ</button>
+          <button type="button" class="key" data-insert="^2">x<sup>2</sup></button>
+          <button type="button" class="key" data-insert="exp(">e<sup>x</sup></button>
+          <button type="button" class="key" data-insert="10^">10<sup>x</sup></button>
+          <button type="button" class="key" data-insert="sqrt(">sqrt</button>
+          <button type="button" class="key" data-insert="ln(">ln</button>
 
-          <button type="button" class="key function" data-insert="factorial(">n!</button>
-          <button type="button" class="key function" data-insert="abs(">abs</button>
-          <button type="button" class="key operator" data-insert="(">(</button>
-          <button type="button" class="key operator" data-insert=")">)</button>
-          <button type="button" class="key operator" data-insert="/">÷</button>
+          <button type="button" class="key" data-insert="log(">log</button>
+          <button type="button" class="key" data-insert="(">(</button>
+          <button type="button" class="key" data-insert=")">)</button>
+          <button type="button" class="key" data-insert="1/">1/x</button>
+          <button type="button" class="key" data-insert="%">%</button>
 
+          <button type="button" class="key" data-insert="factorial(">n!</button>
           <button type="button" class="key number" data-insert="7">7</button>
           <button type="button" class="key number" data-insert="8">8</button>
           <button type="button" class="key number" data-insert="9">9</button>
-          <button type="button" class="key operator" data-insert="*">×</button>
-          <button type="button" class="key operator" data-insert="%">mod</button>
+          <button type="button" class="key operator" data-insert="+">+</button>
 
+          <button type="button" class="key action" data-action="backspace">Back</button>
           <button type="button" class="key number" data-insert="4">4</button>
           <button type="button" class="key number" data-insert="5">5</button>
           <button type="button" class="key number" data-insert="6">6</button>
-          <button type="button" class="key operator" data-insert="-">−</button>
-          <button type="button" class="key function" data-insert="pow(">pow</button>
+          <button type="button" class="key operator" data-insert="-">-</button>
 
+          <button type="button" class="key action" data-action="ans">Ans</button>
           <button type="button" class="key number" data-insert="1">1</button>
           <button type="button" class="key number" data-insert="2">2</button>
           <button type="button" class="key number" data-insert="3">3</button>
-          <button type="button" class="key operator" data-insert="+">+</button>
-          <button type="button" class="key function" data-insert="round(">rnd</button>
+          <button type="button" class="key operator" data-insert="*">&times;</button>
 
-          <button type="button" class="key number wide" data-insert="0">0</button>
+          <button type="button" class="key memory" data-action="memoryAdd">M+</button>
+          <button type="button" class="key number" data-insert="0">0</button>
           <button type="button" class="key number" data-insert=".">.</button>
-          <button type="button" class="key operator" data-insert=",">,</button>
+          <button type="button" class="key" data-insert="e">EXP</button>
+          <button type="button" class="key operator" data-insert="/">&divide;</button>
+
+          <button type="button" class="key memory" data-action="memorySubtract">M-</button>
+          <button type="button" class="key action" data-action="toggleSign">+/-</button>
+          <button type="button" class="key" data-insert="round(">RND</button>
+          <button type="button" class="key danger" data-action="clear">AC</button>
           <button type="button" class="key equals" data-action="calculate">=</button>
+
+          <button type="button" class="key memory" data-action="memoryRecall">MR</button>
+          <button type="button" class="key" data-insert=",">,</button>
+          <button type="button" class="key" data-insert="abs(">abs</button>
+          <button type="button" class="key" data-insert="pow(">pow</button>
+          <button type="button" class="key" data-insert="hypot(">hypot</button>
+        </section>
+
+        <section class="history-panel" aria-label="Calculation history">
+          <div class="history-heading">
+            <h2>History</h2>
+            <button type="button" class="clear-history" id="clearHistory">Clear</button>
+          </div>
+          <ol id="history" class="history-list"></ol>
         </section>
       </section>
-
-      <aside class="history-panel" aria-label="Calculation history">
-        <header>
-          <h2>History</h2>
-          <button type="button" class="small-button" id="clearHistory">Clear</button>
-        </header>
-        <ol id="history" class="history-list"></ol>
-      </aside>
     </main>
   </body>
 </html>
