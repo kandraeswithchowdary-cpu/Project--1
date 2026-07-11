@@ -189,8 +189,21 @@ h2 {
 .history-list li {
   border: 1px solid #d4d4d4;
   border-radius: 4px;
-  padding: 6px;
   background: #fafafa;
+}
+
+.history-entry-button {
+  width: 100%;
+  border: 0;
+  padding: 6px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.history-entry-button:hover {
+  background: #eef4fa;
 }
 
 .history-expression,
@@ -206,14 +219,9 @@ h2 {
 }
 
 .history-result {
-  border: 0;
-  padding: 0;
-  background: transparent;
   color: var(--ink);
   font-size: 1rem;
   font-weight: 800;
-  text-align: left;
-  cursor: pointer;
 }
 
 @media (max-width: 420px) {

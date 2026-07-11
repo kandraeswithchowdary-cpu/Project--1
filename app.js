@@ -193,20 +193,30 @@ if (typeof document === "undefined") {
     historyList.replaceChildren(
       ...history.map((entry) => {
         const item = document.createElement("li");
+        const historyButton = document.createElement("button");
         const expression = document.createElement("span");
-        const result = document.createElement("button");
+        const result = document.createElement("span");
 
+        historyButton.className = "history-entry-button";
+        historyButton.type = "button";
         expression.className = "history-expression";
         expression.textContent = `${entry.expression} (${entry.mode.toUpperCase()})`;
         result.className = "history-result";
-        result.type = "button";
         result.textContent = entry.result;
-        result.addEventListener("click", () => {
-          setExpression(entry.result);
+        historyButton.addEventListener("click", () => {
+          setExpression(entry.expression);
+          resultOutput.textContent = entry.result;
+          lastAnswer = entry.result;
+          angleMode = entry.mode;
+          modeInputs.forEach((input) => {
+            input.checked = input.value === entry.mode;
+          });
+          clearStatus();
           expressionInput.focus();
         });
 
-        item.append(expression, result);
+        historyButton.append(expression, result);
+        item.append(historyButton);
         return item;
       })
     );
@@ -323,6 +333,7 @@ if (typeof document === "undefined") {
   clearHistoryButton.addEventListener("click", () => {
     history.length = 0;
     renderHistory();
+    clearCalculator();
   });
 
   expressionInput.addEventListener("focus", () => {
